@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Code Runner</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea, #764ba2, #ff6a00);
+  background-size: 300% 300%;
+  animation: bgMove 10s infinite alternate;
+  color: white;
+}
+
+@keyframes bgMove {
+  0% { background-position: 0% }
+  100% { background-position: 100% }
+}
+
+/* LIGHT MODE */
+body.light-theme {
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  color: black;
+}
+
+/* NAVBAR */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  backdrop-filter: blur(10px);
+  background: rgba(0,0,0,0.3);
+}
+
+.nav-left {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.logo {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+/* NAV LINKS */
+nav ul {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+  font-size: 14px;
+}
+
+nav a:hover {
+  color: #ffd700;
+}
+
+/* BUTTONS TOP */
+.back-button, .theme-button {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.2);
+}
+
+.back-button:hover, .theme-button:hover {
+  background: white;
+  color: black;
+}
+
+/* MAIN CARD */
+.main {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+}
+
+.card {
+  width: 100%;
+  max-width: 1000px;
+  padding: 25px;
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.1);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+/* TITLE */
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* TEXTAREA */
+textarea {
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  padding: 15px;
+  font-size: 14px;
+  margin-top: 10px;
+  font-family: monospace;
+  background: rgba(0,0,0,0.6);
+  color: #00ffcc;
+}
+
+/* LIGHT TEXTAREA */
+body.light-theme textarea {
+  background: white;
+  color: black;
+}
+
+/* BUTTON GROUP */
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+button {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.run { background: #00ffcc; }
+.ai { background: #ff6a00; color: white; }
+.save { background: #ffd700; }
+
+/* OUTPUT */
+pre {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.6);
+  color: #00ffcc;
+}
+
+/* AI OUTPUT */
+#aiOutput {
+  margin-top: 15px;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 10px;
+  margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="nav-left">
+    <div class="back-button" onclick="history.back()">⬅</div>
+    <div class="logo">CodeMentor AI</div>
+  </div>
+
+  <ul>
+    <li><a href="open.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="progress.html">Progress</a></li>
+    <li><a href="ach.html">Achievements</a></li>
+  </ul>
+
+  <div class="theme-button" onclick="toggleTheme()">🌙</div>
+</nav>
+
+<div class="main">
+  <div class="card">
+
+    <h1>🐍 Python Code Lab</h1>
+
+    <textarea id="pythonCode">print('Hello, Python!')</textarea>
+
+    <div class="actions">
+      <button class="run" onclick="runPython()">Run</button>
+      <button class="ai" onclick="generateWithAI()">AI Fix</button>
+      <button class="save" onclick="saveToFile()">Save</button>
+    </div>
+
+    <pre id="output">Output will appear here...</pre>
+
+    <textarea id="aiOutput" readonly placeholder="AI suggestions..."></textarea>
+
+  </div>
+</div>
+
+<footer>
+  <p>Created by Joyson R | CodeMentor AI</p>
+</footer>
+
+<script>
+function toggleTheme() {
+  document.body.classList.toggle("light-theme");
+
+  const isLightTheme = document.body.classList.contains("light-theme");
+
+  const textareas = document.querySelectorAll("textarea");
+  textareas.forEach(textarea => {
+    textarea.style.backgroundColor = isLightTheme ? "white" : "rgba(0,0,0,0.6)";
+    textarea.style.color = isLightTheme ? "black" : "#00ffcc";
+  });
+
+  const preTags = document.querySelectorAll("pre");
+  preTags.forEach(pre => {
+    pre.style.backgroundColor = isLightTheme ? "#f4f4f4" : "rgba(0,0,0,0.6)";
+    pre.style.color = isLightTheme ? "black" : "#00ffcc";
+  });
+}
+
+/* SAME LOGIC BELOW — NOT CHANGED */
+
+function saveToFile() {
+  const code = document.getElementById("pythonCode").value;
+  const blob = new Blob([code], { type: "text/plain" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "code.py";
+  link.click();
+}
+
+async function runPython() {
+  const code = document.getElementById('pythonCode').value.trim();
+  const student_id = localStorage.getItem('student_id');
+
+  if (!student_id) {
+    document.getElementById('output').textContent = 'Error: No student ID found.';
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:3002/run-python', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, studentId: student_id }),
+    });
+
+    const result = await response.json();
+
+document.getElementById('output').textContent =
+  response.ok
+    ? `Output:\n${result.stdout || result.output || "No output"}\n\nWarnings:\n${result.stderr || "None"}`
+    : `Error: ${result.message || "Execution failed"}`;
+  } catch {
+    document.getElementById('output').textContent = 'Server error';
+  }
+}
+
+async function generateWithAI() {
+  const code = document.getElementById('pythonCode').value.trim();
+
+  if (!code) {
+    document.getElementById('aiOutput').value = 'Enter code first';
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:5000/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: code }),
+    });
+
+    const result = await response.json();
+
+    document.getElementById('aiOutput').value =
+      result.output || 'No suggestions';
+  } catch {
+    document.getElementById('aiOutput').value = 'AI error';
+  }
+}
+</script>
+
+</body>
+</html>

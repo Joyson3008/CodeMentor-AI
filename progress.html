@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progress Dashboard - CodeMentor AI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== BODY ===== */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #0f172a;
+  color: white;
+}
+
+/* ===== NAV ===== */
+nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+nav ul {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+nav a {
+  text-decoration: none;
+  color: #cbd5f5;
+}
+
+nav a:hover {
+  color: #22c55e;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+  padding: 30px;
+}
+
+/* ===== TITLE ===== */
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* ===== INPUT BOX ===== */
+.input-box {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+input {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  width: 200px;
+}
+
+button {
+  padding: 10px 15px;
+  border-radius: 6px;
+  border: none;
+  background: #22c55e;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* ===== GRID ===== */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+  gap: 20px;
+}
+
+/* ===== CARD ===== */
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  transition: 0.3s;
+  animation: fadeUp 0.5s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* ===== IMAGES ===== */
+.card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* ===== TEXT AREA ===== */
+pre {
+  max-height: 250px;
+  overflow-y: auto;
+  background: #020617;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* ===== ERROR ===== */
+#error-message {
+  text-align: center;
+  color: red;
+  display: none;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">CodeMentor AI</div>
+  <ul>
+    <li><a href="open.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="ach.html">Achievements</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+  <h1>📊 Progress Dashboard</h1>
+
+  <!-- INPUT -->
+  <div class="input-box" id="input-container">
+    <input type="number" id="student_id" placeholder="Enter Student ID">
+    <button onclick="storeStudentId()">Submit</button>
+  </div>
+
+  <div id="error-message">
+    <p>No data found</p>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard">
+
+    <div class="card">
+      <h3>Histogram</h3>
+      <img id="histogram">
+    </div>
+
+    <div class="card">
+      <h3>Bar Chart</h3>
+      <img id="bar-chart">
+    </div>
+
+    <div class="card">
+      <h3>Pie Chart</h3>
+      <img id="pie-chart">
+    </div>
+
+    <div class="card">
+      <h3>Detailed Report</h3>
+      <pre id="plot-area"></pre>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+/* STORE ID */
+function storeStudentId() {
+  const studentId = document.getElementById("student_id").value;
+
+  if (!studentId) {
+    alert("Enter Student ID");
+    return;
+  }
+
+  localStorage.setItem("student_id", studentId);
+  document.getElementById("input-container").style.display = "none";
+  fetchData(studentId);
+}
+
+/* FETCH DATA */
+function fetchData(studentId) {
+  const id = studentId || localStorage.getItem("student_id");
+
+  if (!id) return;
+
+  document.getElementById("error-message").style.display = "none";
+  document.getElementById("plot-area").innerText = "";
+
+  fetch(`http://localhost:5002/${id}`)
+    .then(res => {
+      if (!res.ok) throw new Error();
+      return res.json();
+    })
+    .then(data => {
+      displayData(data);
+      fetchVisualizations(id);
+    })
+    .catch(() => {
+      document.getElementById("error-message").style.display = "block";
+    });
+}
+
+/* DISPLAY DATA */
+function displayData(data) {
+  let text = "Student Progress:\n\n";
+
+  data.forEach(item => {
+    text += `Language: ${item.language}
+Syntax: ${item.syntax_error}
+Runtime: ${item.runtime_error}
+Logic: ${item.logic_error}
+
+----------------------\n`;
+  });
+
+  document.getElementById("plot-area").innerText = text;
+}
+
+/* VISUALS */
+function fetchVisualizations(id) {
+  document.getElementById("histogram").src = `http://127.0.0.1:5000/visualize/${id}/histogram`;
+  document.getElementById("bar-chart").src = `http://127.0.0.1:5000/visualize/${id}/bar`;
+  document.getElementById("pie-chart").src = `http://127.0.0.1:5000/visualize/${id}/pie`;
+}
+
+/* AUTO LOAD */
+window.onload = () => {
+  const id = localStorage.getItem("student_id");
+  if (id) {
+    document.getElementById("input-container").style.display = "none";
+    fetchData(id);
+  }
+};
+
+</script>
+
+</body>
+</html>

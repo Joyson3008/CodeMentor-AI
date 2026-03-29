@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeMentor AI - Web IDE</title>
+
+<!-- MONACO -->
+<script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b, #020617);
+  background-size: 300% 300%;
+  animation: gradientMove 12s ease infinite;
+  color: #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+/* LIGHT MODE */
+body.light {
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+  color: #0f172a;
+}
+
+/* GRADIENT ANIMATION */
+@keyframes gradientMove {
+  0% { background-position: 0% 50% }
+  100% { background-position: 100% 50% }
+}
+
+/* NAVBAR */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 40px;
+  background: rgba(2,6,23,0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #1e293b;
+  transition: 0.3s;
+}
+
+body.light nav {
+  background: rgba(255,255,255,0.7);
+  border-bottom: 1px solid #ddd;
+}
+
+/* LOGO */
+.logo {
+  font-size: 18px;
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+/* NAV LINKS */
+.nav-links {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #94a3b8;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #38bdf8;
+}
+
+/* BUTTONS */
+.back-btn, .theme-btn {
+  background: rgba(255,255,255,0.1);
+  padding: 6px 12px;
+width:40px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.back-btn:hover, .theme-btn:hover {
+  background: #38bdf8;
+  color: black;
+}
+
+/* MAIN LAYOUT */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: calc(100vh - 65px);
+  gap: 15px;
+  padding: 15px;
+}
+
+/* EDITORS SIDE */
+.editors {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 15px; /* 🔥 GAP FIX */
+}
+
+/* EDITOR BOX */
+.editor-box {
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+}
+
+/* HOVER EFFECT */
+.editor-box:hover {
+  transform: translateY(-5px) scale(1.01);
+}
+
+/* HEADER */
+.editor-header {
+  padding: 8px 12px;
+  font-size: 13px;
+  background: rgba(30,41,59,0.8);
+  color: #38bdf8;
+  letter-spacing: 0.5px;
+}
+
+/* MONACO CONTAINER */
+.editor {
+  flex: 1;
+  min-height: 0;
+}
+
+/* OUTPUT PANEL */
+.output-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* IFRAME */
+iframe {
+  flex: 1;
+  border-radius: 14px;
+  border: none;
+  background: white;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+/* BUTTON GROUP */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* BUTTON STYLE */
+button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+/* COLORS */
+.run { background: linear-gradient(135deg,#22c55e,#16a34a); }
+.save { background: linear-gradient(135deg,#facc15,#eab308); }
+.ai { background: linear-gradient(135deg,#38bdf8,#0ea5e9); }
+
+/* BUTTON HOVER */
+button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* AI OUTPUT */
+pre {
+  height: 150px;
+  overflow-y: auto;
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  animation: fadeUp 0.5s ease;
+}
+
+/* LIGHT MODE FIXES */
+body.light .editor-box {
+  background: white;
+  border: 1px solid #ddd;
+}
+
+body.light .editor-header {
+  background: #f1f5f9;
+  color: #0ea5e9;
+}
+
+body.light pre {
+  background: #f4f4f4;
+}
+
+/* ANIMATION */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media(max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="nav-left">
+    <div class="back-btn" onclick="history.back()">⬅</div>
+    <div class="logo">CodeMentor AI</div>
+  </div>
+
+  <ul class="nav-links">
+    <li><a href="open.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="progress.html">Progress</a></li>
+    <li><a href="ach.html">Achievements</a></li>
+  </ul>
+
+  <div class="theme-btn" onclick="toggleTheme()">🌙</div>
+</nav>
+
+<div class="container">
+
+  <!-- EDITORS -->
+  <div class="editors">
+    <div class="editor-box">
+      <div class="editor-header">HTML</div>
+      <div id="htmlEditor" class="editor"></div>
+    </div>
+
+    <div class="editor-box">
+      <div class="editor-header">CSS</div>
+      <div id="cssEditor" class="editor"></div>
+    </div>
+
+    <div class="editor-box">
+      <div class="editor-header">JavaScript</div>
+      <div id="jsEditor" class="editor"></div>
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="output-panel">
+    <iframe id="output"></iframe>
+
+    <div class="actions">
+      <button class="run" id="runBtn">Run</button>
+      <button class="save" onclick="saveCode()">Save</button>
+      <button class="ai" onclick="generateWithAI()">AI</button>
+    </div>
+
+    <pre id="aiOutput">AI Output...</pre>
+  </div>
+
+</div>
+
+<script>
+function toggleTheme() {
+  document.body.classList.toggle("light");
+
+  const isLight = document.body.classList.contains("light");
+
+  // 🔥 THIS FIXES MONACO
+  monaco.editor.setTheme(isLight ? "vs-light" : "vs-dark");
+}
+
+/* MONACO SETUP */
+require.config({ paths: { vs: 'https://unpkg.com/monaco-editor@0.45.0/min/vs' }});
+require(["vs/editor/editor.main"], function () {
+
+  window.htmlEditor = monaco.editor.create(document.getElementById("htmlEditor"), {
+    value: `<h1>Hello CodeMentor AI</h1>`,
+    language: "html",
+    theme: "vs-dark",
+    automaticLayout: true
+  });
+
+  window.cssEditor = monaco.editor.create(document.getElementById("cssEditor"), {
+    value: `body { color: black; }`,
+    language: "css",
+    theme: "vs-dark",
+    automaticLayout: true
+  });
+
+  window.jsEditor = monaco.editor.create(document.getElementById("jsEditor"), {
+    value: `console.log("Hello World");`,
+    language: "javascript",
+    theme: "vs-dark",
+    automaticLayout: true
+  });
+});
+
+/* SAVE */
+function saveCode() {
+  const htmlCode = htmlEditor.getValue();
+  const cssCode = cssEditor.getValue();
+  const jsCode = jsEditor.getValue();
+
+  const fullCode = `
+  <html>
+  <head><style>${cssCode}</style></head>
+  <body>${htmlCode}<script>${jsCode}<\/script></body>
+  </html>`;
+
+  const blob = new Blob([fullCode], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'code.html';
+  a.click();
+}
+
+/* RUN */
+document.getElementById('runBtn').addEventListener('click', function () {
+  const htmlCode = htmlEditor.getValue();
+  const cssCode = cssEditor.getValue();
+  const jsCode = jsEditor.getValue();
+
+  const iframe = document.getElementById('output');
+  const doc = iframe.contentDocument;
+
+  doc.open();
+  doc.write(`
+    <html>
+    <head><style>${cssCode}</style></head>
+    <body>${htmlCode}<script>${jsCode}<\/script></body>
+    </html>
+  `);
+  doc.close();
+});
+
+/* AI (UNCHANGED) */
+async function generateWithAI() {
+  const code = jsEditor.getValue().trim();
+  const aiOutputElement = document.getElementById('aiOutput');
+
+  try {
+    const response = await fetch('http://localhost:5000/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: code }),
+    });
+
+    const result = await response.json();
+    aiOutputElement.textContent = result.output || 'No suggestions';
+  } catch {
+    aiOutputElement.textContent = 'AI error';
+  }
+}
+</script>
+
+</body>
+</html>

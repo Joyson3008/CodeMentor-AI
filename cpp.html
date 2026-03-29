@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeMentor AI - C++ Lab</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* DARK THEME DEFAULT */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+  transition: 0.3s;
+}
+
+/* LIGHT THEME */
+body.light {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* NAVBAR */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  background: #020617;
+  border-bottom: 1px solid #1e293b;
+}
+
+body.light nav {
+  background: white;
+  border-bottom: 1px solid #ccc;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.back-btn {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #1e293b;
+}
+
+.back-btn:hover {
+  background: #38bdf8;
+  color: black;
+}
+
+/* NAV LINKS */
+nav ul {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #94a3b8;
+}
+
+nav ul li a:hover {
+  color: #38bdf8;
+}
+
+/* THEME BUTTON */
+.theme-btn {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #1e293b;
+}
+
+.theme-btn:hover {
+  background: #38bdf8;
+  color: black;
+}
+
+/* MAIN */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: calc(100vh - 70px);
+}
+
+.panel {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel h2 {
+  margin-bottom: 10px;
+  color: #38bdf8;
+}
+
+/* EDITOR */
+textarea {
+  flex: 1;
+  background: #020617;
+  border: 1px solid #1e293b;
+  color: #22c55e;
+  padding: 15px;
+  border-radius: 10px;
+  font-family: monospace;
+}
+
+/* LIGHT EDITOR */
+body.light textarea {
+  background: white;
+  color: black;
+  border: 1px solid #ccc;
+}
+
+/* OUTPUT */
+.output-box {
+  flex: 1;
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 15px;
+  color: #facc15;
+}
+
+/* LIGHT OUTPUT */
+body.light .output-box {
+  background: white;
+  color: black;
+  border: 1px solid #ccc;
+}
+
+/* BUTTONS */
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.run { background: #22c55e; }
+.ai { background: #38bdf8; }
+.save { background: #facc15; }
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* RESPONSIVE */
+@media(max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="nav-left">
+    <div class="back-btn" onclick="history.back()">⬅</div>
+    <div class="logo">CodeMentor AI</div>
+  </div>
+
+  <ul>
+    <li><a href="open.html">Home</a></li>
+    <li><a href="progress.html">Progress</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="ach.html">Achievements</a></li>
+  </ul>
+
+  <div class="theme-btn" onclick="toggleTheme()">🌙</div>
+</nav>
+
+<div class="container">
+
+  <div class="panel">
+    <h2>🧠 C++ Editor</h2>
+    <textarea id="cppCode">
+#include<iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, Modern C++!" << endl;
+    return 0;
+}
+    </textarea>
+
+    <div class="buttons">
+      <button class="run" onclick="runCpp()">Run</button>
+      <button class="ai" onclick="generateAI()">AI Fix</button>
+      <button class="save" onclick="saveCode()">Save</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>⚡ Output</h2>
+    <div class="output-box" id="output">Run your code...</div>
+
+    <h2 style="margin-top:15px;">🤖 AI Suggestions</h2>
+    <div class="output-box" id="aiOutput">AI response...</div>
+  </div>
+
+</div>
+
+<script>
+function toggleTheme() {
+  document.body.classList.toggle("light");
+}
+
+/* RUN C++ */
+async function runCpp() {
+  const code = document.getElementById('cppCode').value;
+  const student_id = localStorage.getItem('student_id');
+
+  if (!student_id) {
+    document.getElementById('output').innerText = "Login required!";
+    return;
+  }
+
+  document.getElementById('output').innerText = "Running...";
+
+  try {
+    const res = await fetch('http://localhost:3003/run-cpp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, student_id })
+    });
+
+    const data = await res.json();
+    document.getElementById('output').innerText =
+      data.output || data.details || "No output";
+  } catch {
+    document.getElementById('output').innerText = "Server error";
+  }
+}
+
+/* AI */
+async function generateAI() {
+  const code = document.getElementById('cppCode').value;
+  document.getElementById('aiOutput').innerText = "Analyzing...";
+
+  try {
+    const res = await fetch('http://localhost:5000/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: code })
+    });
+
+    const data = await res.json();
+    document.getElementById('aiOutput').innerText =
+      data.output || "No suggestion";
+  } catch {
+    document.getElementById('aiOutput').innerText = "AI server error";
+  }
+}
+
+/* SAVE */
+function saveCode() {
+  const code = document.getElementById("cppCode").value;
+  const blob = new Blob([code], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "code.cpp";
+  a.click();
+}
+</script>
+
+</body>
+</html>

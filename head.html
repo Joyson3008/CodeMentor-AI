@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeMentor AI - Select Language</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ================= BODY ================= */
+body {
+  font-family: 'Poppins', sans-serif;
+  height: 100vh;
+  overflow-x: hidden;
+  background: radial-gradient(circle at 20% 20%, #6366f1, #0f172a);
+  color: white;
+}
+
+/* ================= ANIMATED BACKGROUND ================= */
+.background-blobs {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.blob {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, #6366f1, #22c55e);
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+  animation: float 10s infinite alternate ease-in-out;
+}
+
+.blob:nth-child(2) {
+  top: 50%;
+  left: 60%;
+  background: linear-gradient(135deg, #ec4899, #facc15);
+  animation-delay: 3s;
+}
+
+.blob:nth-child(3) {
+  top: 20%;
+  left: 80%;
+  background: linear-gradient(135deg, #38bdf8, #22c55e);
+  animation-delay: 6s;
+}
+
+@keyframes float {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-50px); }
+}
+
+/* ================= NAVBAR ================= */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #cbd5f5;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #22c55e;
+}
+
+/* ================= HERO ================= */
+.hero {
+  text-align: center;
+  margin-top: 60px;
+  animation: fadeUp 1s ease;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #cbd5f5;
+}
+
+/* ================= GRID ================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  padding: 60px;
+}
+
+/* ================= CARD ================= */
+.card {
+  position: relative;
+  height: 200px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.4s;
+  overflow: hidden;
+}
+
+/* GLOW */
+.card::before {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: rotate(45deg);
+  transition: 0.5s;
+}
+
+.card:hover::before {
+  transform: translateX(100%) rotate(45deg);
+}
+
+/* HOVER */
+.card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
+
+/* TEXT */
+.card h2 {
+  font-size: 1.8rem;
+  z-index: 1;
+}
+
+/* COLOR VARIANTS */
+.python { background: linear-gradient(135deg,#306998,#FFD43B); }
+.java { background: linear-gradient(135deg,#f89820,#5382a1); }
+.cpp { background: linear-gradient(135deg,#00599C,#004482); }
+.php { background: linear-gradient(135deg,#8993be,#4F5B93); }
+.html { background: linear-gradient(135deg,#e34c26,#f06529); }
+
+/* ================= FOOTER ================= */
+footer {
+  text-align: center;
+  padding: 15px;
+  margin-top: 30px;
+  background: rgba(0,0,0,0.3);
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:768px){
+  .hero h1 { font-size: 2rem; }
+}
+/* PARTICLES CANVAS */
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+}
+
+/* EXTRA GLOW EFFECT */
+.card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* GLOW BORDER */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 2px;
+  background: linear-gradient(45deg, #00f0ff, #ff00ff, #00ff88);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: 0.4s;
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+/* 3D TILT */
+.card {
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease;
+}
+
+/* CARD CONTENT FLOAT */
+.card h2 {
+  transform: translateZ(40px);
+}
+
+/* ENTRY ANIMATION */
+.grid .card {
+  opacity: 0;
+  transform: translateY(50px);
+  animation: fadeUp 0.8s forwards;
+}
+
+.grid .card:nth-child(1) { animation-delay: 0.1s; }
+.grid .card:nth-child(2) { animation-delay: 0.2s; }
+.grid .card:nth-child(3) { animation-delay: 0.3s; }
+.grid .card:nth-child(4) { animation-delay: 0.4s; }
+.grid .card:nth-child(5) { animation-delay: 0.5s; }
+
+/* RIPPLE EFFECT */
+button, .card {
+  position: relative;
+  overflow: hidden;
+}
+
+.card span.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  background: rgba(255,255,255,0.5);
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* FLOATING ICON EFFECT */
+.card::before {
+  content: "⚡";
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  opacity: 0.2;
+  font-size: 20px;
+  animation: floatIcon 3s infinite ease-in-out;
+}
+
+@keyframes floatIcon {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
+</style>
+</head>
+
+<body>
+<canvas id="particles"></canvas>
+<!-- BACKGROUND -->
+<div class="background-blobs">
+  <div class="blob"></div>
+  <div class="blob"></div>
+  <div class="blob"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">CodeMentor AI</div>
+  <ul class="nav-links">
+    <li><a href="open.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="progress.html">Progress</a></li>
+    <li><a href="ach.html">Achievements</a></li>
+    <li><a href="login.html">Logout</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Select Your Language</h1>
+  <p>Start coding with AI-powered guidance</p>
+</div>
+
+<!-- GRID -->
+<div class="grid">
+
+  <div class="card python" onclick="location.href='python.html'">
+    <h2>Python</h2>
+  </div>
+
+  <div class="card java" onclick="location.href='java.html'">
+    <h2>Java</h2>
+  </div>
+
+  <div class="card cpp" onclick="location.href='cpp.html'">
+    <h2>C++</h2>
+  </div>
+
+  <div class="card php" onclick="location.href='php.html'">
+    <h2>PHP</h2>
+  </div>
+
+  <div class="card html" onclick="location.href='html.html'">
+    <h2>HTML</h2>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2024 CodeMentor AI | Designed by Joyson</p>
+</footer>
+<script>
+
+/* PARTICLES SYSTEM */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for (let i = 0; i < 80; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2,
+    dx: Math.random() - 0.5,
+    dy: Math.random() - 0.5
+  });
+}
+
+function drawParticles() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "rgba(255,255,255,0.6)";
+  
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+
+    p.x += p.dx;
+    p.y += p.dy;
+
+    if(p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if(p.y < 0 || p.y > canvas.height) p.dy *= -1;
+  });
+
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+/* 3D TILT EFFECT */
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("mousemove", e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const rotateX = -(y - rect.height / 2) / 10;
+    const rotateY = (x - rect.width / 2) / 10;
+
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
+
+  card.addEventListener("mouseleave", () => {
+    card.style.transform = "rotateX(0) rotateY(0)";
+  });
+});
+
+/* RIPPLE EFFECT */
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("click", function(e) {
+    const ripple = document.createElement("span");
+    ripple.classList.add("ripple");
+
+    const rect = this.getBoundingClientRect();
+    ripple.style.left = `${e.clientX - rect.left}px`;
+    ripple.style.top = `${e.clientY - rect.top}px`;
+
+    this.appendChild(ripple);
+
+    setTimeout(() => ripple.remove(), 600);
+  });
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Achievements - CodeMentor AI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== BODY ===== */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #0f172a;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* ===== PARTICLES ===== */
+#particles {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+}
+
+/* ===== NAV ===== */
+nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  color: #38bdf8;
+}
+
+nav ul {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+nav a {
+  color: #cbd5f5;
+  text-decoration: none;
+}
+
+/* ===== HERO ===== */
+.hero {
+  text-align: center;
+  padding: 40px;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #facc15;
+  text-shadow: 0 0 20px #facc15;
+}
+
+/* ===== ACHIEVEMENT CARD ===== */
+.achievement-card {
+  width: 300px;
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  animation: fadeUp 0.8s ease;
+}
+
+/* BADGE */
+.badge {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin-bottom: 15px;
+  animation: glow 2s infinite alternate;
+}
+
+/* COLORS */
+.bronze { background: linear-gradient(135deg,#cd7f32,#a97142); }
+.silver { background: linear-gradient(135deg,#c0c0c0,#999); }
+.gold { background: linear-gradient(135deg,#facc15,#eab308); }
+
+/* GLOW */
+@keyframes glow {
+  from { box-shadow: 0 0 10px white; }
+  to { box-shadow: 0 0 30px white; }
+}
+
+/* ===== STATS ===== */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+  gap: 20px;
+  padding: 30px;
+}
+
+.stat-card {
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  background: rgba(255,255,255,0.05);
+  transition: 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+/* ===== TABLE ===== */
+table {
+  width: 80%;
+  margin: auto;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background: #22c55e;
+  color: black;
+}
+
+tr:nth-child(even) {
+  background: rgba(255,255,255,0.05);
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== CONFETTI ===== */
+.confetti {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  opacity: 0.8;
+  animation: fall 3s linear;
+}
+
+@keyframes fall {
+  from { transform: translateY(-100vh); }
+  to { transform: translateY(100vh); }
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<nav>
+  <div class="logo">CodeMentor AI</div>
+  <ul>
+    <li><a href="open.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="progress.html">Progress</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <h1>🏆 Achievements</h1>
+</div>
+
+<!-- MAIN CARD -->
+<div class="achievement-card">
+  <div id="badge" class="badge">🏅</div>
+  <h2 id="milestone">Loading...</h2>
+  <p id="programs"></p>
+</div>
+
+<!-- TABLE -->
+<table>
+  <thead>
+    <tr>
+      <th>Milestone</th>
+      <th>Programs</th>
+      <th>Updated</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+
+<footer>
+  <p>© 2024 CodeMentor AI | Joyson</p>
+</footer>
+
+<script>
+
+/* PARTICLES */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for (let i = 0; i < 5; i++) {
+  particles.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    r: Math.random()*2,
+    dx: Math.random()-0.5,
+    dy: Math.random()-0.5
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle="white";
+    ctx.fill();
+    p.x+=p.dx;
+    p.y+=p.dy;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* FETCH DATA */
+document.addEventListener("DOMContentLoaded", async () => {
+  const id = localStorage.getItem("student_id");
+
+  const res = await fetch(`http://localhost:3006/achievements/${id}`);
+  const data = await res.json();
+
+  const ach = data.achievement;
+
+  document.getElementById("milestone").innerText = ach.milestone;
+  document.getElementById("programs").innerText = `Programs: ${ach.corrected_programs}`;
+
+  const badge = document.getElementById("badge");
+
+  if (ach.milestone.toLowerCase() === "gold") badge.classList.add("gold");
+  else if (ach.milestone.toLowerCase() === "silver") badge.classList.add("silver");
+  else badge.classList.add("bronze");
+
+  document.getElementById("tableBody").innerHTML = `
+    <tr>
+      <td>${ach.milestone}</td>
+      <td>${ach.corrected_programs}</td>
+      <td>${ach.last_updated}</td>
+    </tr>
+  `;
+
+  celebrate(ach.milestone);
+});
+
+/* CONFETTI */
+function celebrate(level){
+  for(let i=0;i<80;i++){
+    let c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"%";
+    c.style.background=level==="gold"?"gold":level==="silver"?"silver":"orange";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  }
+}
+
+</script>
+
+</body>
+</html>

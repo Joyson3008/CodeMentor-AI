@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeMentor AI - Java Lab</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* DARK THEME */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+/* LIGHT THEME */
+body.light {
+  background: #f1f5f9;
+  color: black;
+}
+
+/* NAVBAR */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: #020617;
+  border-bottom: 1px solid #1e293b;
+}
+
+body.light nav {
+  background: white;
+}
+
+.nav-left {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.logo {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.back-btn, .theme-btn {
+  background: #1e293b;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.back-btn:hover, .theme-btn:hover {
+  background: #38bdf8;
+  color: black;
+}
+
+/* LAYOUT */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: calc(100vh - 60px);
+}
+
+/* PANEL */
+.panel {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel h2 {
+  color: #38bdf8;
+  margin-bottom: 10px;
+}
+
+/* EDITOR WRAPPER */
+.editor {
+  display: flex;
+  flex: 1;
+  background: #020617;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* LINE NUMBERS */
+.line-numbers {
+  background: #020617;
+  color: #64748b;
+  padding: 10px;
+  text-align: right;
+  user-select: none;
+  font-family: monospace;
+}
+
+/* TEXTAREA */
+textarea {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px;
+  background: transparent;
+  color: #22c55e;
+  font-family: monospace;
+  resize: none;
+  line-height: 20px;
+}
+
+/* LIGHT MODE */
+body.light textarea {
+  color: black;
+}
+
+/* OUTPUT */
+.output-box {
+  flex: 1;
+  background: #020617;
+  padding: 15px;
+  border-radius: 10px;
+  color: #facc15;
+  overflow-y: auto;
+}
+
+body.light .output-box {
+  background: white;
+  color: black;
+}
+
+/* BUTTONS */
+.buttons {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+/* DARK THEME */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+/* LIGHT THEME */
+body.light {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* NAVBAR */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: #020617;
+  border-bottom: 1px solid #1e293b;
+}
+
+body.light nav {
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
+/* BACK + THEME BUTTON */
+.back-btn, .theme-btn {
+  background: #1e293b;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+}
+
+.back-btn:hover, .theme-btn:hover {
+  background: #38bdf8;
+  color: black;
+}
+
+/* LIGHT MODE FIX */
+body.light .back-btn,
+body.light .theme-btn {
+  background: #e2e8f0;
+  color: black;
+}
+
+/* EDITOR */
+.editor {
+  display: flex;
+  flex: 1;
+  background: #020617;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* LIGHT EDITOR FIX */
+body.light .editor {
+  background: white;
+  border: 1px solid #ccc;
+}
+
+/* LINE NUMBERS */
+.line-numbers {
+  background: #020617;
+  color: #64748b;
+  padding: 10px;
+  text-align: right;
+  font-family: monospace;
+}
+
+/* LIGHT LINE NUMBERS */
+body.light .line-numbers {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* TEXTAREA */
+textarea {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px;
+  background: transparent;
+  color: #22c55e;
+  font-family: monospace;
+}
+
+/* LIGHT TEXTAREA */
+body.light textarea {
+  color: black;
+}
+
+/* OUTPUT */
+.output-box {
+  flex: 1;
+  background: #020617;
+  padding: 15px;
+  border-radius: 10px;
+  color: #facc15;
+}
+
+/* LIGHT OUTPUT */
+body.light .output-box {
+  background: white;
+  color: black;
+  border: 1px solid #ccc;
+}
+.run { background: #22c55e; }
+.ai { background: #38bdf8; }
+.save { background: #facc15; }
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* RESPONSIVE */
+@media(max-width:900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+/* NAV LINKS */
+.nav-links {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #94a3b8;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #38bdf8;
+}
+
+/* LIGHT MODE NAV LINKS */
+body.light .nav-links a {
+  color: #334155;
+}
+
+body.light .nav-links a:hover {
+  color: #0ea5e9;
+}
+</style>
+</head>
+
+<body>
+<nav>
+  <div class="nav-left">
+    <div class="back-btn" onclick="history.back()">⬅</div>
+    <div class="logo">CodeMentor AI</div>
+  </div>
+
+  <ul class="nav-links">
+    <li><a href="open.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="progress.html">Progress Report</a></li>
+    <li><a href="ach.html">Achievements</a></li>
+  </ul>
+
+  <div class="theme-btn" onclick="toggleTheme()">🌙</div>
+</nav>
+<div class="container">
+
+  <!-- EDITOR -->
+  <div class="panel">
+    <h2>🧠 Java Editor</h2>
+
+    <div class="editor">
+      <div class="line-numbers" id="lines">1</div>
+      <textarea id="javaCode" spellcheck="false">
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, Java!");
+    }
+}
+      </textarea>
+    </div>
+
+    <div class="buttons">
+      <button class="run" onclick="runJava()">Run</button>
+      <button class="ai" onclick="generateAI()">AI Fix</button>
+      <button class="save" onclick="saveCode()">Save</button>
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="panel">
+    <h2>⚡ Output</h2>
+    <div class="output-box" id="output">Run your code...</div>
+
+    <h2 style="margin-top:10px;">🤖 AI Suggestions</h2>
+    <div class="output-box" id="aiOutput">AI response...</div>
+  </div>
+
+</div>
+
+<script>
+const textarea = document.getElementById("javaCode");
+const lineNumbers = document.getElementById("lines");
+
+/* LINE NUMBER UPDATE */
+function updateLines() {
+  const lines = textarea.value.split("\n").length;
+  lineNumbers.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join("<br>");
+}
+
+textarea.addEventListener("input", updateLines);
+textarea.addEventListener("scroll", () => {
+  lineNumbers.scrollTop = textarea.scrollTop;
+});
+
+updateLines();
+
+/* THEME */
+function toggleTheme() {
+  document.body.classList.toggle("light");
+}
+
+/* RUN JAVA */
+async function runJava() {
+  const code = textarea.value;
+  const student_id = localStorage.getItem('student_id');
+
+  if (!student_id) {
+    document.getElementById('output').innerText = "Login required!";
+    return;
+  }
+
+  document.getElementById('output').innerText = "Running...";
+
+  try {
+    const res = await fetch('http://localhost:3001/run-java', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, student_id })
+    });
+
+    const data = await res.json();
+    document.getElementById('output').innerText =
+      data.output || data.details || data.error || "No output";
+  } catch {
+    document.getElementById('output').innerText = "Server error";
+  }
+}
+
+/* AI */
+async function generateAI() {
+  const code = textarea.value;
+  document.getElementById('aiOutput').innerText = "Analyzing...";
+
+  try {
+    const res = await fetch('http://localhost:5000/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: code })
+    });
+
+    const data = await res.json();
+    document.getElementById('aiOutput').innerText =
+      data.output || "No suggestion";
+  } catch {
+    document.getElementById('aiOutput').innerText = "AI server error";
+  }
+}
+
+/* SAVE */
+function saveCode() {
+  const code = textarea.value;
+  const blob = new Blob([code], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Main.java";
+  a.click();
+}
+</script>
+
+</body>
+</html>

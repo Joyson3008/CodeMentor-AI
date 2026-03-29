@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeMentor AI - PHP Code Runner</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/php/php.min.js"></script>
+  <style>
+    * { box-sizing: border-box; 
+}
+    body {
+      background: linear-gradient(to right,white, #6b11cba9,rgba(37, 116, 252, 0.722),rgba(37, 252, 112, 0.722),rgba(252, 84, 37, 0.722),#6b11cba9,rgba(37, 116, 252, 0.722));
+
+    background-size: 400% 400%;
+    animation: gradientAnimation 10s ease infinite alternate;
+
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+    nav {
+      background-color: #1a1a2e;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+    }
+    nav .logo {
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    nav ul {
+      display: flex;
+      list-style-type: none;
+    }
+    nav ul li {
+      margin-left: 1.5rem;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #ffd700;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      color: #ffd700;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+      animation: fadeIn 1s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .editor-container { margin-bottom: 20px; }
+    textarea {
+      width: 100%;
+      height: 150px;
+      font-size: 16px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-family: monospace;
+      resize: vertical;
+    }
+    button {
+      display: block;
+      width: 100%;
+      max-width: 200px;
+      margin: 20px auto;
+      background-color: #ffcc00;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #003366;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #1a1a2e;
+      color: #ffd700;
+    }
+    #output {
+      margin-top: 20px;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      color: #333;
+    }
+ #generateWithAI {
+      margin-top: 20px;
+      background-color: #eaf7ff;
+      padding: 15px;
+      border: 1px solid #cce5ff;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      color: #0056b3;
+    }
+    footer {
+      margin-top: 20px;
+      padding: 18px 20px;
+      text-align: center;
+      background-color: #1a1a2e;
+      color: white;
+      font-size: 14px;
+      border-radius: 0 0 10px 10px;
+    }
+ .back-button {
+      position: absolute;
+      top: 110px;
+      left: 20px;
+    }
+
+    .back-button a {
+      text-decoration: none;
+      color: white;
+      font-size: 1.5rem;
+      background-color: #1a1a2e;
+      padding: 10px 15px;
+      border-radius: 50%;
+      font-weight: bold;
+    }
+
+    .back-button a:hover {
+      background-color: #ffd700;
+      color: black;
+    }
+    .dark-mode .container {
+      background: grey;
+      color: white;
+
+    }
+ .dark-mode{
+      background: #333;
+      color: white;
+    }
+  .theme-button {
+      position: absolute;
+width:3%;
+align-items:center;
+      top: 110px;
+      right: 20px;
+      background-color:black;
+      padding: 10px 15px;
+      border-radius: 50%;
+    }
+
+    .theme-button:hover {
+      background-color: white;
+      color: white;
+    }
+
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">CodeMentor AI</div>
+    <ul>
+      <li><a href="open.html" style="color: #ffd700; font-weight: bold;">Home</a></li>
+      <li><a href="about.html" style="color: #ffd700; font-weight: bold;">About</a></li>
+      <li><a href="progress.html" style="color: #007bff; font-weight: bold;">Progress Report</a></li>
+      <li><a href="ach.html" style="color: #007bff; font-weight: bold;">Achievements</a></li>
+    </ul>
+  </nav>
+<button class="theme-button" onclick="toggleTheme()">🔆</button>
+ <!-- Back Button -->
+  <div class="back-button">
+     <a href="javascript:history.back()">⬅</a>
+  </div>
+
+
+  <div class="container">
+    <h1>CodeMentor AI - PHP Code Runner</h1>
+    <form id="phpForm">
+      <div class="editor-container">
+        <textarea id="phpCode" placeholder="Write your PHP code here...">&lt;?php echo 'Hello, PHP!'; ?&gt;</textarea>
+  <button type="submit">Run Code</button>
+  <button type="button" onclick="savePHPCode()">Save Code</button>
+      </div>
+    
+    </form>
+
+    <button id="aiButton">CodeMentor AI</button>
+    <div id="output">Output</div>
+    <div id="generateWithAI">AI code runs here...</div>
+  </div>
+
+  <footer>
+    <p>Created by Joyson R | CodeMentor AI 2024</p>
+  </footer>
+
+  <script>
+  function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    function savePHPCode() {
+      const phpCode = document.getElementById('phpCode').value;
+      const blob = new Blob([phpCode], { type: 'text/php' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'code.php';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    async function runPHP() {
+      const phpCode = document.getElementById('phpCode').value;
+      const student_id = localStorage.getItem('student_id');
+
+      if (!student_id) {
+        alert('Error: No student ID found. Please log in.');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:3005/run-php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phpCode, student_id })
+        });
+
+        const result = await response.json();
+        document.getElementById('output').textContent = response.ok
+          ? result.output || 'PHP code executed successfully'
+          : `Error: ${result.message}. Details: ${result.errorMessage || 'No additional details'}`;
+      } catch (error) {
+        document.getElementById('output').textContent = `Error: Unable to connect to server. ${error.message}`;
+      }
+    }
+
+    async function analyzeWithAI() {
+      const code = document.getElementById('phpCode').value.trim();
+      const aiOutputElement = document.getElementById('generateWithAI');
+
+      if (!code) {
+        aiOutputElement.textContent = 'Error: Please enter PHP code.';
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:5000/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: code }),
+        });
+
+        const result = await response.json();
+        aiOutputElement.textContent = response.ok
+          ? result.output || 'No suggestions from AI.'
+          : `Error: ${result.message || 'An error occurred.'}`;
+      } catch (error) {
+        aiOutputElement.textContent = 'Error: Unable to connect to AI server.';
+      }
+    }
+
+    document.getElementById('phpForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      runPHP();
+    });
+
+    document.getElementById('aiButton').addEventListener('click', (event) => {
+      event.preventDefault();
+      analyzeWithAI();
+    });
+  </script>
+</body>
+</html>

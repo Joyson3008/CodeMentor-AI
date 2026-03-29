@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register - CodeMentor AI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== BODY ===== */
+body {
+  font-family: 'Poppins', sans-serif;
+  height: 100vh;
+  background: #0f172a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* ===== PARTICLES ===== */
+#particles {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+}
+
+/* ===== NAV ===== */
+nav {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding: 15px 30px;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+/* ===== LAYOUT ===== */
+.wrapper {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+/* ===== ROBOT ===== */
+.robot {
+  width: 280px;
+border-radius:90px;
+  animation: float 4s infinite ease-in-out;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+/* ===== CARD ===== */
+.container {
+  background: rgba(255,255,255,0.05);
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  width: 350px;
+  animation: fadeUp 1s ease;
+}
+
+/* ===== TITLE ===== */
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #22c55e;
+}
+
+/* ===== INPUT ===== */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  transition: 0.3s;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 0 12px #22c55e;
+}
+
+/* ===== BUTTON ===== */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg,#22c55e,#38bdf8);
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* ===== LINK ===== */
+p {
+  text-align: center;
+ color: #ffffff;
+  margin-top: 10px;
+}
+
+a {
+  color: #38bdf8;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .wrapper {
+    flex-direction: column;
+  }
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  background: rgba(0,0,0,0.3);
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<nav>
+  <div class="logo">CodeMentor AI</div>
+</nav>
+
+<div class="wrapper">
+
+  <!-- ROBOT -->
+  <img class="robot" src="https://cdn.dribbble.com/users/42048/screenshots/8350927/robotintro_dribble.gif">
+
+  <!-- FORM -->
+  <div class="container">
+    <h1>Create Account</h1>
+
+    <form id="registerForm">
+      <input type="number" id="student_id" placeholder="Student ID" required>
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+
+      <button type="submit">Register</button>
+
+      <p>Already have an account? <a href="login.html">Login</a></p>
+    </form>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2024 CodeMentor AI | Joyson</p>
+</footer>
+
+<script>
+
+/* PARTICLES */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for (let i = 0; i < 60; i++) {
+  particles.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    r: Math.random()*2,
+    dx: Math.random()-0.5,
+    dy: Math.random()-0.5
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle="white";
+    ctx.fill();
+
+    p.x+=p.dx;
+    p.y+=p.dy;
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* REGISTER LOGIC (UNCHANGED) */
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const studentId = document.getElementById('student_id').value;
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    const response = await fetch('http://localhost:5004/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ student_id: parseInt(studentId), name, email, password })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      alert('Registration failed: ' + errorData.message);
+    } else {
+      const data = await response.json();
+      alert(data.message);
+      window.location.href = 'login.html';
+    }
+
+  } catch (error) {
+    alert('Network error: ' + error.message);
+  }
+});
+
+</script>
+
+</body>
+</html>
