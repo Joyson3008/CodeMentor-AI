@@ -1,74 +1,101 @@
 # 🚀 CodeMentor AI
 
-> **An Intelligent Full-Stack Coding Assistant with AI-Powered Error Detection & Progress Tracking**
+### *AI-Powered Intelligent Coding Assistant & Learning Platform*
 
 ---
 
-## 📌 Overview
+## 🌟 Overview
 
-**CodeMentor AI** is a modern full-stack web application designed to help students and educators **write, execute, analyze, and improve code efficiently**.
+**CodeMentor AI** is a full-stack intelligent coding platform designed to enhance programming skills through **real-time code execution, AI-based error detection, and data-driven progress tracking**.
 
-It provides:
-
-* ⚡ Real-time code execution
-* 🤖 AI-based code correction
-* 📊 Progress tracking & visualization
-* 🧠 Error classification (Syntax, Runtime, Logical)
+It bridges the gap between **learning and practical coding** by providing instant feedback and personalized insights.
 
 ---
 
-## ✨ Features
+## 🎯 Key Highlights
 
-### 🧑‍💻 Multi-Language Code Editor
+* ⚡ Real-time code execution (Python, C++, Java, PHP, Web)
+* 🤖 AI-powered code analysis & correction
+* 📊 Error tracking with visual analytics
+* 🧠 Categorization of errors (Syntax, Runtime, Logical)
+* 🔐 Secure authentication system
+* 🏆 Achievement-based learning system
 
-* Supports **Python, C++, Java, PHP, HTML/CSS/JS**
-* Clean modern UI with interactive editors
+---
 
-### ⚡ Real-Time Code Execution
+## 🧑‍💻 Features
 
-* Backend execution using **Node.js & Python**
-* Displays output instantly
+### 🖥️ Interactive Coding Environment
 
-### 🤖 AI Code Correction
+* Multi-language support:
 
-* Integrated AI system to:
+  * Python
+  * C++
+  * Java
+  * PHP
+  * HTML, CSS, JavaScript
+* Clean, modern editor interface
 
-  * Detect errors
-  * Suggest fixes
-  * Improve code quality
+---
 
-### 📊 Progress Tracking System
+### ⚡ Code Execution Engine
 
-* Tracks:
+* Executes user code via **Node.js backend**
+* Supports multiple programming languages
+* Returns real-time output & errors
+
+---
+
+### 🤖 AI CodeMentor System
+
+* Analyzes user code
+* Identifies:
 
   * Syntax errors
   * Runtime errors
-  * Logical errors
-* Stores data in **MySQL database**
+  * Logical mistakes
+* Provides intelligent suggestions
 
-### 📈 Data Visualization Dashboard
+---
 
-* Histogram 📊
-* Bar Chart 📉
-* Pie Chart 🥧
-* Helps analyze coding performance over time
+### 📊 Progress Tracking Dashboard
 
-### 🔐 Authentication System
+* Tracks user performance over time
+* Stores results in MySQL
+* Visualizes data using:
 
-* Student login & registration
-* Stores user data securely
+  * Histogram
+  * Bar Chart
+  * Pie Chart
 
-### 🏆 Achievements System
+---
 
-* Tracks milestones like:
+### 🏆 Achievement System
+
+* Milestone-based rewards:
 
   * Bronze 🥉
   * Silver 🥈
   * Gold 🥇
+* Encourages continuous learning
 
 ---
 
-## 🏗️ Tech Stack
+## 🏗️ System Architecture
+
+```
+Frontend (HTML, CSS, JS)
+        ↓
+Node.js Server (API + Execution Engine)
+        ↓
+Python Service (Analysis + Visualization)
+        ↓
+MySQL Database (User + Progress Data)
+```
+
+---
+
+## 🛠️ Tech Stack
 
 ### 💻 Frontend
 
@@ -78,8 +105,8 @@ It provides:
 
 ### ⚙️ Backend
 
-* Node.js (API & execution handling)
-* Python (analysis & visualization)
+* Node.js (Express.js)
+* Python (Flask)
 
 ### 🗄️ Database
 
@@ -87,28 +114,14 @@ It provides:
 
 ### 🔧 Tools
 
+* Git & GitHub
 * Postman (API testing)
-* Git & GitHub (version control)
 
 ---
 
-## 🧠 System Architecture
+## ⚙️ Setup Instructions
 
-```
-Frontend (HTML/CSS/JS)
-        ↓
-Node.js Server (Execution API)
-        ↓
-Python Engine (Analysis & Visualization)
-        ↓
-MySQL Database (Progress Tracking)
-```
-
----
-
-## ⚙️ Installation & Setup
-
-### 1️⃣ Clone Repository
+### 1️⃣ Clone the Repository
 
 ```
 git clone https://github.com/Joyson3008/CodeMentor-AI.git
@@ -117,7 +130,7 @@ cd CodeMentor-AI
 
 ---
 
-### 2️⃣ Install Node Dependencies
+### 2️⃣ Install Dependencies
 
 ```
 npm install
@@ -125,25 +138,30 @@ npm install
 
 ---
 
-### 3️⃣ Setup MySQL Database
+### 3️⃣ Configure Database
 
-* Create database: `codementor ai`
-* Create tables:
+* Create MySQL database:
 
-  * `students`
-  * `progress_report`
+```
+codementor ai
+```
+
+* Required tables:
+
+  * students
+  * progress_report
 
 ---
 
-### 4️⃣ Run Backend Servers
+### 4️⃣ Run Servers
 
-#### ▶ Node Server
+#### ▶ Node Backend
 
 ```
 node app.js
 ```
 
-#### ▶ Python Server
+#### ▶ Python Backend
 
 ```
 python plot.py
@@ -151,9 +169,9 @@ python plot.py
 
 ---
 
-### 5️⃣ Open Application
+### 5️⃣ Run Application
 
-Open in browser:
+Open:
 
 ```
 http://localhost:3000
@@ -161,55 +179,69 @@ http://localhost:3000
 
 ---
 
-## 📊 Database Structure
+## 📊 Database Schema
 
-### 🧑 Students Table
+### Students Table
 
-* student_id
-* name
-* email
-* password
+| Field      | Type    |
+| ---------- | ------- |
+| student_id | INT     |
+| name       | VARCHAR |
+| email      | VARCHAR |
+| password   | VARCHAR |
 
-### 📈 Progress Report Table
+---
 
-* id
-* language
-* syntax_error
-* runtime_error
-* logic_error
-* time_stamp
-* student_id
+### Progress Report Table
+
+| Field         | Type     |
+| ------------- | -------- |
+| id            | INT      |
+| language      | VARCHAR  |
+| syntax_error  | INT      |
+| runtime_error | INT      |
+| logic_error   | INT      |
+| time_stamp    | DATETIME |
+| student_id    | INT      |
 
 ---
 
 ## 🚀 Future Enhancements
 
-* 🌐 Cloud deployment (AWS / Vercel)
-* 🧠 Advanced AI suggestions (LLMs)
-* 👨‍🏫 Teacher dashboard
+* 🌐 Cloud deployment (AWS / Docker)
+* 🧠 Advanced AI integration (LLMs like GPT)
 * 📱 Mobile app version
-* 🏆 Leaderboard system
+* 👨‍🏫 Teacher dashboard
+* 🏆 Leaderboard & ranking system
 
 ---
 
+## 💼 Resume Value
 
-## 📜 License
+> Developed a full-stack AI-based coding assistant using Node.js, Python, and MySQL, featuring real-time code execution, intelligent error detection, and performance visualization through interactive dashboards.
 
-This project is for educational and portfolio purposes.
+---
+
+## 👨‍💻 Author
+
+**Joyson R**
+🎓 M.Sc Computer Science
+💡 Full-Stack Developer
 
 ---
 
 ## ⭐ Support
 
-If you like this project:
+If you found this project useful:
 
-👉 Give it a ⭐ on GitHub
-👉 Share with others
+* ⭐ Star this repository
+* 🍴 Fork and explore
+* 📢 Share with others
 
 ---
 
-## 💬 Final Note
+## 📌 Final Thought
 
-> *"CodeMentor AI is not just a project — it's a complete intelligent coding ecosystem designed to improve learning through AI and data-driven insights."*
+> *"CodeMentor AI transforms coding practice into an intelligent, data-driven learning experience."*
 
 ---
