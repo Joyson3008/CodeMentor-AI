@@ -106,18 +106,6 @@ MySQL Database (Progress Tracking)
 
 ---
 
-## 📸 Screenshots (Add your images here)
-
-> ⚠️ Upload screenshots in your repo and link here
-
-```
-![Home Page](screenshots/home.png)
-![Editor](screenshots/editor.png)
-![Progress](screenshots/progress.png)
-```
-
----
-
 ## ⚙️ Installation & Setup
 
 ### 1️⃣ Clone Repository
@@ -204,13 +192,6 @@ http://localhost:3000
 
 ---
 
-## 👨‍💻 Author
-
-**Joyson R**
-🎓 M.Sc Computer Science Student
-💡 Passionate Full-Stack Developer
-
----
 
 ## 📜 License
 
